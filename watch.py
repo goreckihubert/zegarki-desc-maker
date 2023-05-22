@@ -33,3 +33,4 @@ class Watch:
 
     def __str__(self):
         return f"Watch({self.kod_produktu})"
+

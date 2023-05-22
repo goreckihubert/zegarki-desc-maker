@@ -69,3 +69,9 @@ class WatchDatabase:
             return watch
         else:
             return None
+
+    def update_watch(self, kod_produktu, attribute, new_value):
+        query = f'UPDATE watches SET {attribute} = ? WHERE kod_produktu = ?'
+        self.cursor.execute(query, (new_value, kod_produktu))
+        self.connection.commit()
+

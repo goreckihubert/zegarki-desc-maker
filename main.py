@@ -112,11 +112,18 @@ def display_watches_from_database(database):
     database.display_watches()
 
 
-def modify_watch_attributes(watch):
+def modify_watch_attributes(database, watch):
     print('Modyfikowanie atrybutów zegarka:')
+    print('Dostępne atrybuty: kod_produktu, proba, grawer, dla_kogo, rodzaj, styl, pochodzenie, szkiełko, rodzaj_koperty, szerokosc_koperty, grubosc_koperty, typ_paska_bransolety, kolor_paska_bransolety, wodoszczelnosc, mechanizm, gwarancja, kolor_tarczy')
     attribute = input('Podaj nazwę atrybutu do modyfikacji: ')
     new_value = input('Podaj nową wartość: ')
-    watch.update_attribute(attribute, new_value)
+
+    if hasattr(watch, attribute):
+        setattr(watch, attribute, new_value)
+        print(f"Atrybut {attribute} został zaktualizowany.")
+        database.update_watch(watch.kod_produktu, attribute, new_value)
+    else:
+        print(f"Atrybut {attribute} nie istnieje.")
 
 
 def main():
@@ -128,7 +135,7 @@ def main():
         print('1. Dodaj zegarek do bazy danych')
         print('2. Usuń zegarek z bazy danych')
         print('3. Wyświetl zegarki z bazy danych')
-        print('4. Modyfikuj atrybuty zegarka')
+        print('4. Zmodyfikuj atrybut zegarka')
         print('0. Zakończ program')
 
         choice = input('Wybierz opcję: ')
@@ -142,16 +149,16 @@ def main():
         elif choice == '4':
             kod_produktu = input('Podaj kod produktu zegarka do modyfikacji: ')
             watch = database.get_watch(kod_produktu)
-            if watch is not None:
-                modify_watch_attributes(watch)
+            if watch:
+                modify_watch_attributes(database, watch)
             else:
-                print('Zegarek o podanym kodzie nie istnieje.')
+                print('Zegarek o podanym kodzie produktu nie istnieje.')
         elif choice == '0':
             break
         else:
             print('Nieprawidłowa opcja. Spróbuj ponownie.')
 
-        database.close_connection()
+    database.close_connection()
 
 
 if __name__ == '__main__':
