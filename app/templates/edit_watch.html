@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <h1>Edytuj zegarek</h1>
+    <form method="POST" action="{{ url_for('edit_watch', kod_produktu=watch.kod_produktu) }}">
+        {{ form.hidden_tag() }}
+        {{ form.kod_produktu.label }} {{ form.kod_produktu() }}<br>
+        {{ form.grawer.label }} {{ form.grawer() }}<br>
+        {{ form.dla_kogo.label }} {{ form.dla_kogo() }}<br>
+        <!-- ... -->
+        <input type="submit" value="Zapisz">
+    </form>
+{% endblock %}

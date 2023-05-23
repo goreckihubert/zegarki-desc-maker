@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <h1>Lista zegarków</h1>
+    {% if watches %}
+        <table>
+            <tr>
+                <th>Kod produktu</th>
+                <th>Grawer</th>
+                <th>Dla kogo</th>
+                <!-- ... -->
+                <th>Akcje</th>
+            </tr>
+            {% for watch in watches %}
+                <tr>
+                    <td>{{ watch.kod_produktu }}</td>
+                    <td>{{ watch.grawer }}</td>
+                    <td>{{ watch.dla_kogo }}</td>
+                    <!-- ... -->
+                    <td>
+                        <a href="{{ url_for('edit_watch', kod_produktu=watch.kod_produktu) }}">Edytuj</a>
+                        <a href="{{ url_for('delete_watch', kod_produktu=watch.kod_produktu) }}">Usuń</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Brak zegarków w bazie danych.</p>
+    {% endif %}
+{% endblock %}
