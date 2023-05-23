@@ -1,77 +1,46 @@
-# database.py
-import sqlite3
-
-from watch import Watch
+from app import db
 
 
-class WatchDatabase:
-    def __init__(self, db_file):
-        self.connection = sqlite3.connect(db_file)
-        self.cursor = self.connection.cursor()
-        self.create_table()
+class Watch(db.Model):
+    __tablename__ = 'watches'
 
-    def create_table(self):
-        query = '''CREATE TABLE IF NOT EXISTS watches (
-            kod_produktu TEXT PRIMARY KEY,
-            proba TEXT,
-            grawer TEXT,
-            dla_kogo TEXT,
-            rodzaj TEXT,
-            styl TEXT,
-            pochodzenie TEXT,
-            szkiełko TEXT,
-            rodzaj_koperty TEXT,
-            szerokosc_koperty REAL,
-            grubosc_koperty REAL,
-            typ_paska_bransolety TEXT,
-            kolor_paska_bransolety TEXT,
-            wodoszczelnosc TEXT,
-            mechanizm TEXT,
-            gwarancja TEXT,
-            kolor_tarczy TEXT
-        )'''
-        self.cursor.execute(query)
-        self.connection.commit()
+    id = db.Column(db.Integer, primary_key=True)
+    kod_produktu = db.Column(db.String(50), unique=True, nullable=False)
+    proba = db.Column(db.String(20))
+    grawer = db.Column(db.String(100))
+    dla_kogo = db.Column(db.String(50))
+    rodzaj = db.Column(db.String(50))
+    styl = db.Column(db.String(50))
+    pochodzenie = db.Column(db.String(50))
+    szkiełko = db.Column(db.String(50))
+    rodzaj_koperty = db.Column(db.String(50))
+    szerokosc_koperty = db.Column(db.Float)
+    grubosc_koperty = db.Column(db.Float)
+    typ_paska_bransolety = db.Column(db.String(50))
+    kolor_paska_bransolety = db.Column(db.String(50))
+    wodoszczelnosc = db.Column(db.String(50))
+    mechanizm = db.Column(db.String(50))
+    gwarancja = db.Column(db.String(50))
+    kolor_tarczy = db.Column(db.String(50))
 
-    def add_watch(self, watch_data):
-        query = '''INSERT INTO watches (
-            kod_produktu, proba, grawer, dla_kogo, rodzaj, styl, pochodzenie,
-            szkiełko, rodzaj_koperty, szerokosc_koperty, grubosc_koperty,
-            typ_paska_bransolety, kolor_paska_bransolety, wodoszczelnosc,
-            mechanizm, gwarancja, kolor_tarczy
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
-        self.cursor.execute(query, watch_data)
-        self.connection.commit()
-
-    def delete_watch(self, kod_produktu):
-        query = 'DELETE FROM watches WHERE kod_produktu = ?'
-        self.cursor.execute(query, (kod_produktu,))
-        self.connection.commit()
-
-    def display_watches(self):
-        query = 'SELECT * FROM watches'
-        self.cursor.execute(query)
-        watches = self.cursor.fetchall()
-        for watch in watches:
-            print(watch)
-
-    def close_connection(self):
-        self.connection.close()
-
-    def get_watch(self, kod_produktu):
-        query = 'SELECT * FROM watches WHERE kod_produktu = ?'
-        self.cursor.execute(query, (kod_produktu,))
-        watch_data = self.cursor.fetchone()
-
-        if watch_data:
-            # Przekazujemy dane z bazy do konstruktora klasy Watch
-            watch = Watch(*watch_data)
-            return watch
-        else:
-            return None
-
-    def update_watch(self, kod_produktu, attribute, new_value):
-        query = f'UPDATE watches SET {attribute} = ? WHERE kod_produktu = ?'
-        self.cursor.execute(query, (new_value, kod_produktu))
-        self.connection.commit()
-
+    def __init__(self, kod_produktu, proba, grawer, dla_kogo, rodzaj, styl, pochodzenie,
+                 szkiełko, rodzaj_koperty, szerokosc_koperty, grubosc_koperty,
+                 typ_paska_bransolety, kolor_paska_bransolety, wodoszczelnosc,
+                 mechanizm, gwarancja, kolor_tarczy):
+        self.kod_produktu = kod_produktu
+        self.proba = proba
+        self.grawer = grawer
+        self.dla_kogo = dla_kogo
+        self.rodzaj = rodzaj
+        self.styl = styl
+        self.pochodzenie = pochodzenie
+        self.szkiełko = szkiełko
+        self.rodzaj_koperty = rodzaj_koperty
+        self.szerokosc_koperty = szerokosc_koperty
+        self.grubosc_koperty = grubosc_koperty
+        self.typ_paska_bransolety = typ_paska_bransolety
+        self.kolor_paska_bransolety = kolor_paska_bransolety
+        self.wodoszczelnosc = wodoszczelnosc
+        self.mechanizm = mechanizm
+        self.gwarancja = gwarancja
+        self.kolor_tarczy = kolor_tarczy
