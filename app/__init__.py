@@ -1,13 +1,19 @@
 from flask import Flask
-from flask import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+from flask_babel import Babel
+from config import Config
 
-# Inicjalizacja aplikacji Flask
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///watches.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy()
+babel = Babel()
 
-# Inicjalizacja bazy danych SQLAlchemy
-db = SQLAlchemy(app)
 
-# Importowanie modułów routes i models
-from app import routes, models
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    babel.init_app(app)
+
+    from app import routes, models
+
+    return app
