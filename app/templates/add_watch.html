@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dodaj zegarek</title>
+</head>
+<body>
+    <h1>Dodaj zegarek</h1>
+    <form method="POST" action="{{ url_for('add_watch') }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.kod_produktu.label }}
+            {{ form.kod_produktu(size=20) }}
+            {% if form.kod_produktu.errors %}
+                <ul class="errors">
+                    {% for error in form.kod_produktu.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.proba.label }}
+            {{ form.proba(size=20) }}
+            {% if form.proba.errors %}
+                <ul class="errors">
+                    {% for error in form.proba.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <!-- Dodaj pozostałe pola formularza -->
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+</body>
+</html>
